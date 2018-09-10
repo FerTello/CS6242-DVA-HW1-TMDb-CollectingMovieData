@@ -1,1 +1,2 @@
-# CS6242-DVA-HW1-TMDb
+# Repository created to work on HW1 of CS6242 Data & Visual Analytics
+# "The Movie Database API"
