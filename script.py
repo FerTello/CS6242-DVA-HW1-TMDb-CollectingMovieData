@@ -47,11 +47,8 @@ with open('movie_ID_name.csv') as csvFile:
     popMoviesIDs = []
     for row in readCSV:
         ID = row[0]
-
         popMoviesIDs.append(ID)
 
-    print(popMoviesIDs)
-    print(popMoviesIDs[0])
 
 listBoth = []
 for index in range(0, 300):
@@ -65,8 +62,8 @@ for index in range(0, 300):
             sim_results = sim[key2]
             if len(sim_results) > 0:
                 for a in range(0, len(sim_results)):  # only need 5 similar movies (ids)
-                    if len(sim_results) <= 5:
-                        print("+++++++++++++++++++++++"+str(len(sim_results))+" similar movies of" + popMoviesIDs[index])
+                    # if len(sim_results) <= 5:
+                    #     print("+++++++++++++++++++++++"+str(len(sim_results))+" similar movies of" + popMoviesIDs[index])
                     if a == 5:
                         print("-------------"+str(a)+" all similar movies of " + popMoviesIDs[index])
                         break
@@ -75,32 +72,34 @@ for index in range(0, 300):
                             sim_movie_id = sim_results[a][key3]
                             print(popMoviesIDs[index]+","+str(sim_movie_id), file=open("movie_ID_sim_movie_ID.csv", "a+"))
                             listBoth.append([str(popMoviesIDs[index]), str(sim_movie_id)])
-                else:
-                    print(popMoviesIDs[index]+" has no similar movies")
+            else:
+                print(popMoviesIDs[index]+" has no similar movies")
 
-
-delDuplicates = []
-a = 0
 
 # filling in duplicates to be removed in delDuplicates[]
+delDuplicates = []
+a = 0
 for i in range(0, len(listBoth)):
     j = i + 1
     for j in range(i + 1, len(listBoth)):
-        if listBoth[i][0] == listBoth[j][1]:
-            print("possible duplicate")
-            if listBoth[j][0] == listBoth[i][1]:
-                print("duplicate found")
+        if listBoth[i][0] == listBoth[j][1]:  # print("possible duplicate")
+            if listBoth[j][0] == listBoth[i][1]:  # print("duplicate found")
                 if listBoth[i][0] < listBoth[j][0]:
                     delDuplicates.append(listBoth[j])
                 else:
                     delDuplicates.append(listBoth[i])
 
 print("len(listBoth) before dup rem: " + str(len(listBoth)))
+# removing duplicates from listBoth[]
 for i in range(len(delDuplicates)):
     for j in range(len(listBoth)):
         if delDuplicates[i] == listBoth[j]:
             del listBoth[j]
             break
+# update csv
+file = open("movie_ID_sim_movie_ID_wo_duplicates.csv", "w+")
+for i in range(len(listBoth)):
+    print(str(listBoth[i][0]) + "," + str(listBoth[i][1]), file=open("movie_ID_sim_movie_ID_wo_duplicates.csv", "a+"))
 
 print("len(listBoth) after dup rem: " + str(len(listBoth)))
 print("listBoth: " + str(listBoth))
